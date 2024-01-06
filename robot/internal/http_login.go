@@ -7,11 +7,11 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/gucooing/hkrpg-go/internal/SDK"
-	"github.com/gucooing/hkrpg-go/pkg/logger"
-	"github.com/gucooing/hkrpg-go/pkg/random"
-	"github.com/gucooing/hkrpg-go/protocol/proto"
-	"github.com/gucooing/hkrpg-go/robot/pkg/config"
+	"github.com/Eichs/hkrpg-go/internal/SDK"
+	"github.com/Eichs/hkrpg-go/pkg/logger"
+	"github.com/Eichs/hkrpg-go/pkg/random"
+	"github.com/Eichs/hkrpg-go/protocol/proto"
+	"github.com/Eichs/hkrpg-go/robot/pkg/config"
 	pb "google.golang.org/protobuf/proto"
 
 	"github.com/go-resty/resty/v2"

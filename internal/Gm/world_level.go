@@ -1,8 +1,8 @@
 package Gm
 
 import (
+	proto "github.com/Eichs/hkrpg-go/protocol/gmpb"
 	"github.com/gin-gonic/gin"
-	proto "github.com/gucooing/hkrpg-go/protocol/gmpb"
 )
 
 func WorldLevel(c *gin.Context) {

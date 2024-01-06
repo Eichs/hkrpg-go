@@ -64,7 +64,7 @@ func (g *Game) HandleGetPlayerBoardDataCsReq(payloadMsg []byte) {
 		CurrentHeadIconId:    g.Player.HeadImage,
 		UnlockedHeadIconList: make([]*proto.HeadIcon, 0),
 		Signature:            g.Player.Signature,
-		//Unk1:                 "",
+		//	Unk1:                 "",
 	}
 
 	for _, avatar := range g.Player.DbItem.HeadIcon {
@@ -259,7 +259,7 @@ func (g *Game) InteractPropCsReq() {
 func (g *Game) TextJoinQueryCsReq() {
 	rsp := new(proto.TextJoinQueryScRsp)
 	for _, textJoin := range gdconf.GetTextJoinConfigMap() {
-		textJoinList := &proto.TextJoinQueryScRsp_TextJoinInfo{
+		textJoinList := &proto.TextJoinInfo{
 			TextItemId:       textJoin.TextJoinID,
 			TextItemConfigId: textJoin.TextJoinItemList[len(textJoin.TextJoinItemList)-1],
 		}

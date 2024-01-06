@@ -9,10 +9,10 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/gucooing/hkrpg-go/pkg/logger"
-	"github.com/gucooing/hkrpg-go/robot/internal"
-	"github.com/gucooing/hkrpg-go/robot/pkg/config"
-	"github.com/gucooing/hkrpg-go/robot/pkg/gdconf"
+	"github.com/Eichs/hkrpg-go/pkg/logger"
+	"github.com/Eichs/hkrpg-go/robot/internal"
+	"github.com/Eichs/hkrpg-go/robot/pkg/config"
+	"github.com/Eichs/hkrpg-go/robot/pkg/gdconf"
 	"golang.org/x/net/context"
 )
 

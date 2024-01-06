@@ -4,9 +4,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/gucooing/hkrpg-go/gdconf"
-	"github.com/gucooing/hkrpg-go/protocol/cmd"
-	"github.com/gucooing/hkrpg-go/protocol/proto"
+	"github.com/Eichs/hkrpg-go/gdconf"
+	"github.com/Eichs/hkrpg-go/protocol/cmd"
+	"github.com/Eichs/hkrpg-go/protocol/proto"
 )
 
 /***********************************大世界攻击事件处理***********************************/
@@ -28,7 +28,7 @@ func (g *Game) SceneCastSkillCsReq(payloadMsg []byte) {
 			// 技能处理，有的技能并不会增加buff而是回复生命等功能
 		}
 	}
-	if len(req.HitTargetIdList) == 0 {
+	if len(req.HitTargetEntityIdList) == 0 {
 		rsp := &proto.SceneCastSkillScRsp{
 			AttackedGroupId: req.AttackedGroupId,
 		}
@@ -36,14 +36,14 @@ func (g *Game) SceneCastSkillCsReq(payloadMsg []byte) {
 		return
 	}
 
-	if g.Player.EntityList[req.HitTargetIdList[0]] == nil {
+	if g.Player.EntityList[req.HitTargetEntityIdList[0]] == nil {
 		rsp := &proto.SceneCastSkillScRsp{
 			AttackedGroupId: req.AttackedGroupId,
 		}
 		g.Send(cmd.SceneCastSkillScRsp, rsp)
 		return
 	}
-	entity := g.Player.EntityList[req.HitTargetIdList[0]]
+	entity := g.Player.EntityList[req.HitTargetEntityIdList[0]]
 	stageID = gdconf.GetPlaneEventById(entity.Entity, g.Player.WorldLevel)
 	if stageID == nil {
 		newEntity := g.Player.EntityList[req.CasterId]
@@ -57,10 +57,10 @@ func (g *Game) SceneCastSkillCsReq(payloadMsg []byte) {
 	rsp := &proto.SceneCastSkillScRsp{
 		AttackedGroupId: req.AttackedGroupId,
 		BattleInfo: &proto.SceneBattleInfo{
-			BuffList:         make([]*proto.BattleBuff, 0), // Buff列表
-			LogicRandomSeed:  gdconf.GetLoadingDesc(),      // 逻辑随机种子
-			StageId:          stageID.StageID,              // 阶段id
-			TurnSnapshotList: nil,                          // 打开快照列表？
+			BuffList:        make([]*proto.BattleBuff, 0), // Buff列表
+			LogicRandomSeed: gdconf.GetLoadingDesc(),      // 逻辑随机种子
+			StageId:         stageID.StageID,              // 阶段id
+			//TurnSnapshotList: nil,                          // 打开快照列表？
 			WorldLevel:       g.Player.WorldLevel,
 			RoundsLimit:      0,                              // 回合限制
 			BattleId:         g.GetBattleIdGuid(),            // 战斗Id
@@ -136,7 +136,7 @@ func (g *Game) SceneCastSkillCsReq(payloadMsg []byte) {
 	g.Player.Battle = make(map[uint32]*Battle)
 	battle := &Battle{
 		BattleId:         rsp.BattleInfo.BattleId,
-		EventID:          req.HitTargetIdList[0],
+		EventID:          req.HitTargetEntityIdList[0],
 		LogicRandomSeed:  rsp.BattleInfo.LogicRandomSeed,
 		RoundsLimit:      rsp.BattleInfo.RoundsLimit,
 		BuffList:         rsp.BattleInfo.BuffList,
@@ -202,9 +202,8 @@ func (g *Game) PVEBattleResultCsReq(payloadMsg []byte) {
 					GroupId: entity.GroupId,
 					RefreshEntity: []*proto.SceneEntityRefreshInfo{
 						{
-							UpdateType: &proto.SceneEntityRefreshInfo_DelEntity{
-								DelEntity: battle.EventID,
-							},
+							//UpdateType: &proto.SceneEntityRefreshInfo_DelEntity{
+							DelEntity: battle.EventID,
 						},
 					},
 				},
@@ -364,7 +363,7 @@ func (g *Game) StartRogueCsReq(payloadMsg []byte) {
 	// 可独立成单独的方法
 	rogueScoreInfo := &proto.RogueScoreRewardInfo{
 		HasTakenInitialScore: true, // 已取得初始积分？
-		RogueImmersifier:     0,
+		//RogueImmersifier:     0,
 		Score:                0,
 		PoolRefreshed:        true, // 刷新？
 		TakenScoreRewardList: nil,
@@ -445,10 +444,10 @@ func (g *Game) StartRogueCsReq(payloadMsg []byte) {
 		}
 		entityId := uint32(g.GetNextGameObjectGuid())
 		entityList := &proto.SceneEntityInfo{
-			EntityCase: &proto.SceneEntityInfo_Actor{Actor: &proto.SceneActorInfo{
+			Actor: &proto.SceneActorInfo{
 				AvatarType:   proto.AvatarType_AVATAR_FORMAL_TYPE,
 				BaseAvatarId: avatarId,
-			}},
+			},
 			Motion: &proto.MotionInfo{
 				Pos: &proto.Vector{
 					X: int32(anchor.PosX * 1000),
@@ -518,10 +517,10 @@ func (g *Game) StartRogueCsReq(payloadMsg []byte) {
 						Z: 0,
 					},
 				},
-				EntityCase: &proto.SceneEntityInfo_Prop{Prop: &proto.ScenePropInfo{
+				Prop: &proto.ScenePropInfo{
 					PropId:    propList.PropID, // PropID
 					PropState: gdconf.GetStateValue(propList.State),
-				}},
+				},
 			}
 			entityGroupLists.EntityList = append(entityGroupLists.EntityList, entityList)
 		}
@@ -544,11 +543,11 @@ func (g *Game) StartRogueCsReq(payloadMsg []byte) {
 						Z: 0,
 					},
 				},
-				EntityCase: &proto.SceneEntityInfo_NpcMonster{NpcMonster: &proto.SceneNpcMonsterInfo{
+				NpcMonster: &proto.SceneNpcMonsterInfo{
 					WorldLevel: g.Player.WorldLevel,
 					MonsterId:  monsterList.NPCMonsterID,
 					EventId:    monsterList.EventID,
-				}},
+				},
 			}
 			entityMap[entityId] = &EntityList{
 				Entity:  monsterList.EventID,
@@ -575,9 +574,9 @@ func (g *Game) StartRogueCsReq(payloadMsg []byte) {
 						Z: 0,
 					},
 				},
-				EntityCase: &proto.SceneEntityInfo_Npc{Npc: &proto.SceneNpcInfo{
+				Npc: &proto.SceneNpcInfo{
 					NpcId: npcList.NPCID,
-				}},
+				},
 			}
 			entityGroupLists.EntityList = append(entityGroupLists.EntityList, entityList)
 		}

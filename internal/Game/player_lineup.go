@@ -59,26 +59,24 @@ func (g *Game) SceneGroupRefreshScNotify() {
 		}
 		entityId := uint32(g.GetNextGameObjectGuid())
 		sceneEntityRefreshInfo := &proto.SceneEntityRefreshInfo{
-			UpdateType: &proto.SceneEntityRefreshInfo_AddEntity{
-				AddEntity: &proto.SceneEntityInfo{
-					EntityCase: &proto.SceneEntityInfo_Actor{Actor: &proto.SceneActorInfo{
-						AvatarType:   g.Player.DbAvatar.Avatar[lineup].Type,
-						BaseAvatarId: lineup,
-					}},
-					Motion: &proto.MotionInfo{
-						Pos: &proto.Vector{
-							X: int32(pos.X),
-							Y: int32(pos.Y),
-							Z: int32(pos.Z),
-						},
-						Rot: &proto.Vector{
-							X: int32(rot.X),
-							Y: int32(rot.Y),
-							Z: int32(rot.Z),
-						},
-					},
-					EntityId: entityId,
+			AddEntity: &proto.SceneEntityInfo{
+				Actor: &proto.SceneActorInfo{
+					AvatarType:   g.Player.DbAvatar.Avatar[lineup].Type,
+					BaseAvatarId: lineup,
 				},
+				Motion: &proto.MotionInfo{
+					Pos: &proto.Vector{
+						X: int32(pos.X),
+						Y: int32(pos.Y),
+						Z: int32(pos.Z),
+					},
+					Rot: &proto.Vector{
+						X: int32(rot.X),
+						Y: int32(rot.Y),
+						Z: int32(rot.Z),
+					},
+				},
+				EntityId: entityId,
 			},
 		}
 		g.Player.EntityList[entityId] = &EntityList{

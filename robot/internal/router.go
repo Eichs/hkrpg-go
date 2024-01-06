@@ -1,7 +1,7 @@
 package internal
 
 import (
-	"github.com/gucooing/hkrpg-go/protocol/cmd"
+	"github.com/Eichs/hkrpg-go/protocol/cmd"
 	pb "google.golang.org/protobuf/proto"
 )
 

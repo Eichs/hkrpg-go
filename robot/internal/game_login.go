@@ -3,9 +3,9 @@ package internal
 import (
 	"time"
 
-	"github.com/gucooing/hkrpg-go/pkg/logger"
-	"github.com/gucooing/hkrpg-go/protocol/cmd"
-	"github.com/gucooing/hkrpg-go/protocol/proto"
+	"github.com/Eichs/hkrpg-go/pkg/logger"
+	"github.com/Eichs/hkrpg-go/protocol/cmd"
+	"github.com/Eichs/hkrpg-go/protocol/proto"
 	pb "google.golang.org/protobuf/proto"
 )
 
@@ -31,12 +31,12 @@ func (r *RoBot) PlayerGetTokenCsReq() {
 }
 
 func (r *RoBot) PlayerLoginCsReq() {
-	req := &proto.PlayerLoginCsReq{
-		Signature:   "",
-		LoginRandom: 0,
-	}
+	//req := &proto.PlayerLoginCsReq{
+	//	Signature:   "",
+	//	LoginRandom: 0,
+	//}
 
-	r.send(cmd.PlayerLoginCsReq, req)
+	//r.send(cmd.PlayerLoginCsReq, req)
 }
 
 func (r *RoBot) PlayerLoginScRsp() {
