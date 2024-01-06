@@ -1,7 +1,7 @@
 package Game
 
 import (
-	"github.com/gucooing/hkrpg-go/protocol/proto"
+	"github.com/Eichs/hkrpg-go/protocol/proto"
 )
 
 type PlayerData struct {

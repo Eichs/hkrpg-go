@@ -4,9 +4,9 @@ import (
 	"reflect"
 	"sync"
 
-	"github.com/gucooing/hkrpg-go/pkg/logger"
-	gmpb "github.com/gucooing/hkrpg-go/protocol/gmpb"
-	"github.com/gucooing/hkrpg-go/protocol/proto"
+	"github.com/Eichs/hkrpg-go/pkg/logger"
+	gmpb "github.com/Eichs/hkrpg-go/protocol/gmpb"
+	"github.com/Eichs/hkrpg-go/protocol/proto"
 	pb "google.golang.org/protobuf/proto"
 )
 
@@ -47,8 +47,8 @@ func NewCmdProtoMap() (r *CmdProtoMap) {
 func (c *CmdProtoMap) registerMessage() {
 	c.regMsg(ActivateFarmElementCsReq, func() any { return new(proto.ActivateFarmElementCsReq) })
 	c.regMsg(ActivateFarmElementScRsp, func() any { return new(proto.ActivateFarmElementScRsp) })
-	c.regMsg(AddRogueBuffScNotify, func() any { return new(proto.AddRogueBuffScNotify) })
-	c.regMsg(AddRogueMiracleScNotify, func() any { return new(proto.AddRogueMiracleScNotify) })
+	//c.regMsg(AddRogueBuffScNotify, func() any { return new(proto.AddRogueBuffScNotify) })
+	//c.regMsg(AddRogueMiracleScNotify, func() any { return new(proto.AddRogueMiracleScNotify) })
 	c.regMsg(ApplyFriendCsReq, func() any { return new(proto.ApplyFriendCsReq) })
 	c.regMsg(AvatarExpUpCsReq, func() any { return new(proto.AvatarExpUpCsReq) })
 	c.regMsg(AvatarExpUpScRsp, func() any { return new(proto.AvatarExpUpScRsp) })
@@ -154,7 +154,7 @@ func (c *CmdProtoMap) registerMessage() {
 	c.regMsg(PlayerGetTokenScRsp, func() any { return new(proto.PlayerGetTokenScRsp) })
 	c.regMsg(PlayerHeartBeatCsReq, func() any { return new(proto.PlayerHeartbeatCsReq) })
 	c.regMsg(PlayerHeartBeatScRsp, func() any { return new(proto.PlayerHeartbeatScRsp) })
-	c.regMsg(PlayerLoginCsReq, func() any { return new(proto.PlayerLoginCsReq) })
+	//c.regMsg(PlayerLoginCsReq, func() any { return new(proto.PlayerLoginCsReq) })
 	c.regMsg(PlayerLoginScRsp, func() any { return new(proto.PlayerLoginScRsp) })
 	c.regMsg(PlayerSyncScNotify, func() any { return new(proto.PlayerSyncScNotify) })
 	c.regMsg(PromoteAvatarCsReq, func() any { return new(proto.PromoteAvatarCsReq) })
@@ -170,7 +170,7 @@ func (c *CmdProtoMap) registerMessage() {
 	c.regMsg(ReserveStaminaExchangeCsReq, func() any { return new(proto.ReserveStaminaExchangeCsReq) })
 	c.regMsg(ReserveStaminaExchangeScRsp, func() any { return new(proto.ReserveStaminaExchangeScRsp) })
 	c.regMsg(RevcMsgScNotify, func() any { return new(proto.RevcMsgScNotify) })
-	c.regMsg(RollRogueBuffScRsp, func() any { return new(proto.RollRogueBuffScRsp) })
+	///	c.regMsg(RollRogueBuffScRsp, func() any { return new(proto.RollRogueBuffScRsp) })
 	c.regMsg(SceneCastSkillCsReq, func() any { return new(proto.SceneCastSkillCsReq) })
 	c.regMsg(SceneCastSkillMpUpdateScNotify, func() any { return new(proto.SceneCastSkillMpUpdateScNotify) })
 	c.regMsg(SceneCastSkillScRsp, func() any { return new(proto.SceneCastSkillScRsp) })
@@ -184,16 +184,16 @@ func (c *CmdProtoMap) registerMessage() {
 	c.regMsg(SelectChatBubbleScRsp, func() any { return new(proto.SelectChatBubbleScRsp) })
 	c.regMsg(SelectPhoneThemeCsReq, func() any { return new(proto.SelectPhoneThemeCsReq) })
 	c.regMsg(SelectPhoneThemeScRsp, func() any { return new(proto.SelectPhoneThemeScRsp) })
-	c.regMsg(SelectRogueBuffCsReq, func() any { return new(proto.SelectRogueBuffCsReq) })
-	c.regMsg(SelectRogueBuffScRsp, func() any { return new(proto.SelectRogueBuffScRsp) })
+	//c.regMsg(SelectRogueBuffCsReq, func() any { return new(proto.SelectRogueBuffCsReq) })
+	//c.regMsg(SelectRogueBuffScRsp, func() any { return new(proto.SelectRogueBuffScRsp) })
 	c.regMsg(SelectRogueDialogueEventCsReq, func() any { return new(proto.SelectRogueDialogueEventCsReq) })
 	c.regMsg(SelectRogueDialogueEventScRsp, func() any { return new(proto.SelectRogueDialogueEventScRsp) })
-	c.regMsg(SelectRogueMiracleCsReq, func() any { return new(proto.SelectRogueMiracleCsReq) })
-	c.regMsg(SelectRogueMiracleScRsp, func() any { return new(proto.SelectRogueMiracleScRsp) })
+	//c.regMsg(SelectRogueMiracleCsReq, func() any { return new(proto.SelectRogueMiracleCsReq) })
+	//c.regMsg(SelectRogueMiracleScRsp, func() any { return new(proto.SelectRogueMiracleScRsp) })
 	c.regMsg(SellItemCsReq, func() any { return new(proto.SellItemCsReq) })
 	c.regMsg(SellItemScRsp, func() any { return new(proto.SellItemScRsp) })
 	c.regMsg(SendMsgCsReq, func() any { return new(proto.SendMsgCsReq) })
-	c.regMsg(ServerAnnounceNotify, func() any { return new(proto.ServerAnnounceNotify) })
+	//c.regMsg(ServerAnnounceNotify, func() any { return new(proto.ServerAnnounceNotify) })
 	c.regMsg(SetClientPausedCsReq, func() any { return new(proto.SetClientPausedCsReq) })
 	c.regMsg(SetClientPausedScRsp, func() any { return new(proto.SetClientPausedScRsp) })
 	c.regMsg(SetGameplayBirthdayCsReq, func() any { return new(proto.SetGameplayBirthdayCsReq) })
@@ -223,10 +223,10 @@ func (c *CmdProtoMap) registerMessage() {
 	c.regMsg(SyncDeleteFriendScNotify, func() any { return new(proto.SyncDeleteFriendScNotify) })
 	c.regMsg(SyncHandleFriendScNotify, func() any { return new(proto.SyncHandleFriendScNotify) })
 	c.regMsg(SyncLineupNotify, func() any { return new(proto.SyncLineupNotify) })
-	c.regMsg(SyncRogueBuffSelectInfoScNotify, func() any { return new(proto.SyncRogueBuffSelectInfoScNotify) })
+	//c.regMsg(SyncRogueBuffSelectInfoScNotify, func() any { return new(proto.SyncRogueBuffSelectInfoScNotify) })
 	c.regMsg(SyncRogueFinishScNotify, func() any { return new(proto.SyncRogueFinishScNotify) })
 	c.regMsg(SyncRogueMapRoomScNotify, func() any { return new(proto.SyncRogueMapRoomScNotify) })
-	c.regMsg(SyncRogueMiracleSelectInfoScNotify, func() any { return new(proto.SyncRogueMiracleSelectInfoScNotify) })
+	//c.regMsg(SyncRogueMiracleSelectInfoScNotify, func() any { return new(proto.SyncRogueMiracleSelectInfoScNotify) })
 	c.regMsg(SyncRogueVirtualItemInfoScNotify, func() any { return new(proto.SyncRogueVirtualItemInfoScNotify) })
 	c.regMsg(TakeChallengeRewardCsReq, func() any { return new(proto.TakeChallengeRewardCsReq) })
 	c.regMsg(TakeChallengeRewardScRsp, func() any { return new(proto.TakeChallengeRewardScRsp) })

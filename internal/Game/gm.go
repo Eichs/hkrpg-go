@@ -3,10 +3,10 @@ package Game
 import (
 	"time"
 
-	"github.com/gucooing/hkrpg-go/gdconf"
-	"github.com/gucooing/hkrpg-go/protocol/cmd"
-	gmpb "github.com/gucooing/hkrpg-go/protocol/gmpb"
-	"github.com/gucooing/hkrpg-go/protocol/proto"
+	"github.com/Eichs/hkrpg-go/gdconf"
+	"github.com/Eichs/hkrpg-go/protocol/cmd"
+	gmpb "github.com/Eichs/hkrpg-go/protocol/gmpb"
+	"github.com/Eichs/hkrpg-go/protocol/proto"
 	pb "google.golang.org/protobuf/proto"
 )
 

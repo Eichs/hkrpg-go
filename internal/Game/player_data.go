@@ -3,9 +3,9 @@ package Game
 import (
 	"time"
 
-	"github.com/gucooing/hkrpg-go/gdconf"
-	"github.com/gucooing/hkrpg-go/protocol/cmd"
-	"github.com/gucooing/hkrpg-go/protocol/proto"
+	"github.com/Eichs/hkrpg-go/gdconf"
+	"github.com/Eichs/hkrpg-go/protocol/cmd"
+	"github.com/Eichs/hkrpg-go/protocol/proto"
 )
 
 func (g *Game) HandleGetArchiveDataCsReq(payloadMsg []byte) {
@@ -18,7 +18,7 @@ func (g *Game) HandleGetArchiveDataCsReq(payloadMsg []byte) {
 		ArchiveAvatarIdList:    make([]uint32, 0),
 		ArchiveEquipmentIdList: make([]uint32, 0),
 		ArchiveMonsterIdList:   make([]*proto.MonsterArchive, 0),
-		ArchiveRelicList:       make([]*proto.RelicArchive, 0),
+		RelicList:              make([]*proto.RelicArchive, 0),
 	}
 	for _, monsterList := range gdconf.GetMonsterConfigMap() {
 		archiveMonsterIdList := &proto.MonsterArchive{
@@ -30,9 +30,9 @@ func (g *Game) HandleGetArchiveDataCsReq(payloadMsg []byte) {
 	for _, relicList := range gdconf.GetRelicMap() {
 		archiveRelicList := &proto.RelicArchive{
 			RelicId: relicList.ID,
-			Type:    relicList.Type,
+			Slot:    relicList.Type,
 		}
-		archiveData.ArchiveRelicList = append(archiveData.ArchiveRelicList, archiveRelicList)
+		archiveData.RelicList = append(archiveData.RelicList, archiveRelicList)
 	}
 
 	rsp.ArchiveData = archiveData
@@ -45,7 +45,7 @@ func (g *Game) HandleGetPlayerBoardDataCsReq(payloadMsg []byte) {
 		CurrentHeadIconId:    g.Player.HeadImage,
 		UnlockedHeadIconList: make([]*proto.HeadIcon, 0),
 		Signature:            g.Player.Signature,
-		Unk1:                 "",
+		//Unk1:                 "",
 	}
 
 	for _, avatar := range g.Player.DbAvatar.Avatar {
@@ -135,7 +135,7 @@ func (g *Game) GetMailCsReq() {
 	rsp.TotalNum = 1
 	rsp.IsEnd = true
 	mailList := &proto.ClientMail{
-		Sender:  "gucooing",
+		Sender:  "Eichs",
 		Content: "欢迎来到 hkrpg-go server",
 		Title:   "欢迎来到 hkrpg-go server",
 	}
@@ -162,9 +162,9 @@ func (g *Game) GetFirstTalkNpcCsReq() {
 func (g *Game) HandleGetJukeboxDataCsReq(payloadMsg []byte) {
 	rsp := new(proto.GetJukeboxDataScRsp)
 	rsp.PlayingId = 210000
-	rsp.MusicList = make([]*proto.GetJukeboxDataScRsp_UnlockedMusic, 0)
+	rsp.MusicList = make([]*proto.UnlockedMusic, 0)
 	for _, backMusicList := range gdconf.GetBackGroundMusicMap() {
-		musicList := &proto.GetJukeboxDataScRsp_UnlockedMusic{
+		musicList := &proto.UnlockedMusic{
 			GroupId: backMusicList.GroupID,
 			Unkbool: true,
 			Id:      backMusicList.ID,

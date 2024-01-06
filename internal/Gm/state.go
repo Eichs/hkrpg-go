@@ -1,8 +1,8 @@
 package Gm
 
 import (
+	"github.com/Eichs/hkrpg-go/internal/Net"
 	"github.com/gin-gonic/gin"
-	"github.com/gucooing/hkrpg-go/internal/Net"
 )
 
 var (

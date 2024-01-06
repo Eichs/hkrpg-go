@@ -4,8 +4,8 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 
-	"github.com/gucooing/hkrpg-go/pkg/endec"
-	"github.com/gucooing/hkrpg-go/pkg/logger"
+	"github.com/Eichs/hkrpg-go/pkg/endec"
+	"github.com/Eichs/hkrpg-go/pkg/logger"
 	pb "google.golang.org/protobuf/proto"
 )
 

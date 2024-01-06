@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/Eichs/hkrpg-go/internal/DataBase"
+	"github.com/Eichs/hkrpg-go/pkg/config"
+	"github.com/Eichs/hkrpg-go/pkg/logger"
 	"github.com/gin-gonic/gin"
-	"github.com/gucooing/hkrpg-go/internal/DataBase"
-	"github.com/gucooing/hkrpg-go/pkg/config"
-	"github.com/gucooing/hkrpg-go/pkg/logger"
 )
 
 type Server struct {

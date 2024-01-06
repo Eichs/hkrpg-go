@@ -3,8 +3,8 @@ package SDK
 import (
 	"io/ioutil"
 
+	"github.com/Eichs/hkrpg-go/pkg/logger"
 	"github.com/gin-gonic/gin"
-	"github.com/gucooing/hkrpg-go/pkg/logger"
 )
 
 func (s *Server) ComboGranterApiGetConfigHandler(c *gin.Context) {

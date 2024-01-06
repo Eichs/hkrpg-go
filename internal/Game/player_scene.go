@@ -3,9 +3,9 @@ package Game
 import (
 	"strconv"
 
-	"github.com/gucooing/hkrpg-go/gdconf"
-	"github.com/gucooing/hkrpg-go/protocol/cmd"
-	"github.com/gucooing/hkrpg-go/protocol/proto"
+	"github.com/Eichs/hkrpg-go/gdconf"
+	"github.com/Eichs/hkrpg-go/protocol/cmd"
+	"github.com/Eichs/hkrpg-go/protocol/proto"
 )
 
 // 通知客户端进入场景
@@ -40,10 +40,10 @@ func (g *Game) EnterSceneByServerScNotify(entryId uint32) {
 					continue
 				}
 				entityList := &proto.SceneEntityInfo{
-					EntityCase: &proto.SceneEntityInfo_Actor{Actor: &proto.SceneActorInfo{
+					Actor: &proto.SceneActorInfo{
 						AvatarType:   proto.AvatarType_AVATAR_FORMAL_TYPE,
 						BaseAvatarId: avatarid,
-					}},
+					},
 					Motion: &proto.MotionInfo{
 						Pos: &proto.Vector{
 							X: int32(anchor.PosX * 1000),
@@ -101,10 +101,10 @@ func (g *Game) EnterSceneByServerScNotify(entryId uint32) {
 						Z: 0,
 					},
 				},
-				EntityCase: &proto.SceneEntityInfo_Prop{Prop: &proto.ScenePropInfo{
+				Prop: &proto.ScenePropInfo{
 					PropId:    propList.PropID,
 					PropState: 0,
-				}},
+				},
 			}
 			entityGroupList.EntityList = append(entityGroupList.EntityList, entityList)
 		}
@@ -150,10 +150,10 @@ func (g *Game) HandleGetCurSceneInfoCsReq(payloadMsg []byte) {
 			continue
 		}
 		entityList := &proto.SceneEntityInfo{
-			EntityCase: &proto.SceneEntityInfo_Actor{Actor: &proto.SceneActorInfo{
+			Actor: &proto.SceneActorInfo{
 				AvatarType:   proto.AvatarType_AVATAR_FORMAL_TYPE,
 				BaseAvatarId: avatarid,
-			}},
+			},
 			Motion: &proto.MotionInfo{
 				Pos: &proto.Vector{
 					X: int32(pos.X),
@@ -195,10 +195,10 @@ func (g *Game) HandleGetCurSceneInfoCsReq(payloadMsg []byte) {
 						Z: 0,
 					},
 				},
-				EntityCase: &proto.SceneEntityInfo_Prop{Prop: &proto.ScenePropInfo{
+				Prop: &proto.ScenePropInfo{
 					PropId:    propList.PropID,
 					PropState: 0,
-				}},
+				},
 			}
 			entityGroupList.EntityList = append(entityGroupList.EntityList, entityList)
 		}

@@ -5,12 +5,12 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/gucooing/hkrpg-go/gdconf"
-	"github.com/gucooing/hkrpg-go/internal/DataBase"
-	"github.com/gucooing/hkrpg-go/pkg/logger"
-	"github.com/gucooing/hkrpg-go/pkg/random"
-	"github.com/gucooing/hkrpg-go/protocol/cmd"
-	"github.com/gucooing/hkrpg-go/protocol/proto"
+	"github.com/Eichs/hkrpg-go/gdconf"
+	"github.com/Eichs/hkrpg-go/internal/DataBase"
+	"github.com/Eichs/hkrpg-go/pkg/logger"
+	"github.com/Eichs/hkrpg-go/pkg/random"
+	"github.com/Eichs/hkrpg-go/protocol/cmd"
+	"github.com/Eichs/hkrpg-go/protocol/proto"
 )
 
 func (g *Game) HandlePlayerGetTokenCsReq(payloadMsg []byte) {
@@ -29,7 +29,7 @@ func (g *Game) HandlePlayerGetTokenCsReq(payloadMsg []byte) {
 
 	if uidPlayer.ComboToken != req.Token {
 		rsp.Uid = 0
-		rsp.Retcode = uint32(proto.Retcode_RETCODE_RET_ACCOUNT_VERIFY_ERROR)
+		rsp.Retcode = uint32(1)
 		rsp.Msg = "token验证失败"
 		g.send(cmd.PlayerGetTokenScRsp, rsp)
 		logger.Info("登录账号:%v,token验证失败", accountUid)
@@ -38,7 +38,7 @@ func (g *Game) HandlePlayerGetTokenCsReq(payloadMsg []byte) {
 
 	if uidPlayer.IsBan {
 		rsp.Uid = 0
-		rsp.Retcode = uint32(proto.Retcode_RETCODE_RET_ACCOUNT_PARA_ERROR)
+		rsp.Retcode = uint32(1)
 		rsp.Msg = "账号已被封禁"
 		g.send(cmd.PlayerGetTokenScRsp, rsp)
 		logger.Info("登录账号:%v,已被封禁", accountUid)
@@ -54,7 +54,7 @@ func (g *Game) HandlePlayerGetTokenCsReq(payloadMsg []byte) {
 	err = g.Db.UpdateUidPlayer(uidPlayer.AccountId, newuidPlayer)
 	if err != nil {
 		rsp.Uid = 0
-		rsp.Retcode = uint32(proto.Retcode_RETCODE_RET_ACCOUNT_VERIFY_ERROR)
+		rsp.Retcode = uint32(1)
 		rsp.Msg = "账号刷新失败"
 		g.send(cmd.PlayerGetTokenScRsp, rsp)
 		logger.Error("登录账号:%v,账号刷新失败", accountUid)

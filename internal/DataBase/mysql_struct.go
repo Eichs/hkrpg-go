@@ -1,7 +1,7 @@
 package DataBase
 
 import (
-	"github.com/gucooing/hkrpg-go/pkg/config"
+	"github.com/Eichs/hkrpg-go/pkg/config"
 	"gorm.io/gorm"
 )
 

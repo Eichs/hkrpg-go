@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/gucooing/hkrpg-go/pkg/logger"
+	"github.com/Eichs/hkrpg-go/pkg/logger"
 	"github.com/hjson/hjson-go/v4"
 )
 

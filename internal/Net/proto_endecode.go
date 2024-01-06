@@ -1,9 +1,9 @@
 package Net
 
 import (
-	"github.com/gucooing/hkrpg-go/internal/Game"
-	"github.com/gucooing/hkrpg-go/pkg/logger"
-	"github.com/gucooing/hkrpg-go/protocol/cmd"
+	"github.com/Eichs/hkrpg-go/internal/Game"
+	"github.com/Eichs/hkrpg-go/pkg/logger"
+	"github.com/Eichs/hkrpg-go/protocol/cmd"
 	pb "google.golang.org/protobuf/proto"
 )
 

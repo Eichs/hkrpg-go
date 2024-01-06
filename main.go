@@ -10,11 +10,11 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/gucooing/hkrpg-go/gdconf"
-	"github.com/gucooing/hkrpg-go/internal"
-	"github.com/gucooing/hkrpg-go/internal/Net"
-	"github.com/gucooing/hkrpg-go/pkg/config"
-	"github.com/gucooing/hkrpg-go/pkg/logger"
+	"github.com/Eichs/hkrpg-go/gdconf"
+	"github.com/Eichs/hkrpg-go/internal"
+	"github.com/Eichs/hkrpg-go/internal/Net"
+	"github.com/Eichs/hkrpg-go/pkg/config"
+	"github.com/Eichs/hkrpg-go/pkg/logger"
 )
 
 func main() {

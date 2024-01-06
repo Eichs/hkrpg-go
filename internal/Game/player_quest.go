@@ -1,9 +1,9 @@
 package Game
 
 import (
-	"github.com/gucooing/hkrpg-go/gdconf"
-	"github.com/gucooing/hkrpg-go/protocol/cmd"
-	"github.com/gucooing/hkrpg-go/protocol/proto"
+	"github.com/Eichs/hkrpg-go/gdconf"
+	"github.com/Eichs/hkrpg-go/protocol/cmd"
+	"github.com/Eichs/hkrpg-go/protocol/proto"
 )
 
 func (g *Game) HandleGetMissionStatusCsReq(payloadMsg []byte) {
@@ -33,7 +33,7 @@ func (g *Game) GetQuestDataCsReq(payloadMsg []byte) {
 		quest := &proto.Quest{
 			FinishTime: 10000,
 			Progress:   questList.QuestType,
-			Status:     proto.Quest_QUEST_CLOSE,
+			Status:     proto.QuestStatus_QUEST_CLOSE,
 			Id:         questList.QuestID,
 		}
 		rsp.QuestList = append(rsp.QuestList, quest)

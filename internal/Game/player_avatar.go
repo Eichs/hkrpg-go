@@ -1,8 +1,8 @@
 package Game
 
 import (
-	"github.com/gucooing/hkrpg-go/protocol/cmd"
-	"github.com/gucooing/hkrpg-go/protocol/proto"
+	"github.com/Eichs/hkrpg-go/protocol/cmd"
+	"github.com/Eichs/hkrpg-go/protocol/proto"
 )
 
 func (g *Game) HandleGetAvatarDataCsReq(payloadMsg []byte) {

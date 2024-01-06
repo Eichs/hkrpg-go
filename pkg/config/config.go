@@ -5,7 +5,7 @@ import (
 	"errors"
 	"os"
 
-	"github.com/gucooing/hkrpg-go/pkg/random"
+	"github.com/Eichs/hkrpg-go/pkg/random"
 )
 
 type Config struct {

@@ -1,8 +1,8 @@
 package SDK
 
 import (
+	"github.com/Eichs/hkrpg-go/internal/Gm"
 	"github.com/gin-gonic/gin"
-	"github.com/gucooing/hkrpg-go/internal/Gm"
 )
 
 func (s *Server) Api(c *gin.Context) {

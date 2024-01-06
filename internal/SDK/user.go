@@ -6,10 +6,10 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/Eichs/hkrpg-go/internal/DataBase"
+	"github.com/Eichs/hkrpg-go/pkg/logger"
+	"github.com/Eichs/hkrpg-go/pkg/random"
 	"github.com/gin-gonic/gin"
-	"github.com/gucooing/hkrpg-go/internal/DataBase"
-	"github.com/gucooing/hkrpg-go/pkg/logger"
-	"github.com/gucooing/hkrpg-go/pkg/random"
 )
 
 /*

@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/gucooing/hkrpg-go/pkg/logger"
+	"github.com/Eichs/hkrpg-go/pkg/logger"
 	"github.com/hjson/hjson-go/v4"
 )
 
 type ActivityPanel struct {
-	PanelID          uint32              `json:"PanelID"`
-	Type             uint32              `json:"Type"`
-	ActivityModuleID uint32              `json:"ActivityModuleID"`
-	UnlockConditions []*UnlockConditions `json:"UnlockConditions"` // 解锁条件
+	PanelID          uint32 `json:"PanelID"`
+	Type             uint32 `json:"Type"`
+	ActivityModuleID uint32 `json:"ActivityModuleID"`
+	UnlockConditions string `json:"UnlockConditions"` // 解锁条件
 }
 
 type UnlockConditions struct {

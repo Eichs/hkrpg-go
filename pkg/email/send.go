@@ -3,8 +3,8 @@ package email
 import (
 	"net/smtp"
 
-	"github.com/gucooing/hkrpg-go/pkg/config"
-	"github.com/gucooing/hkrpg-go/pkg/logger"
+	"github.com/Eichs/hkrpg-go/pkg/config"
+	"github.com/Eichs/hkrpg-go/pkg/logger"
 )
 
 func EmailSend(mailaccount, code string) {

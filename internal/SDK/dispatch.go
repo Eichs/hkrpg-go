@@ -5,10 +5,10 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/Eichs/hkrpg-go/pkg/config"
+	"github.com/Eichs/hkrpg-go/pkg/logger"
+	"github.com/Eichs/hkrpg-go/protocol/proto"
 	"github.com/gin-gonic/gin"
-	"github.com/gucooing/hkrpg-go/pkg/config"
-	"github.com/gucooing/hkrpg-go/pkg/logger"
-	"github.com/gucooing/hkrpg-go/protocol/proto"
 	pb "google.golang.org/protobuf/proto"
 )
 
@@ -48,7 +48,7 @@ func (s *Server) QueryGatewayHandler(c *gin.Context) {
 	queryGateway.Unk3 = true
 	queryGateway.Unk4 = true
 	queryGateway.Unk5 = true
-	queryGateway.Unk6 = true
+	//queryGateway.Unk6 = true
 
 	reqdata, err := pb.Marshal(queryGateway)
 	if err != nil {

@@ -5,12 +5,12 @@ import (
 	"io/ioutil"
 	"os"
 
+	"github.com/Eichs/hkrpg-go/internal/DataBase"
+	"github.com/Eichs/hkrpg-go/internal/SDK"
+	"github.com/Eichs/hkrpg-go/pkg/config"
+	"github.com/Eichs/hkrpg-go/pkg/logger"
+	"github.com/Eichs/hkrpg-go/pkg/random"
 	"github.com/gin-gonic/gin"
-	"github.com/gucooing/hkrpg-go/internal/DataBase"
-	"github.com/gucooing/hkrpg-go/internal/SDK"
-	"github.com/gucooing/hkrpg-go/pkg/config"
-	"github.com/gucooing/hkrpg-go/pkg/logger"
-	"github.com/gucooing/hkrpg-go/pkg/random"
 )
 
 // 初始化所有服务

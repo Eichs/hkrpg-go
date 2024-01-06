@@ -1,4 +1,4 @@
-module github.com/gucooing/hkrpg-go
+module github.com/Eichs/hkrpg-go
 
 go 1.20
 
