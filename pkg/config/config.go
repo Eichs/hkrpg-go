@@ -109,10 +109,16 @@ var DefaultConfig = &Config{
 			DispatchUrl: "http://127.0.0.1:8080/query_gateway",
 		},
 		{
-			Name:        "hkrpg-official",
-			Title:       "os_usa",
+			Name:        "hkrpg-official-os",
+			Title:       "OS客户端更新",
 			Type:        "2",
-			DispatchUrl: "http://127.0.0.1:8080/query_gateway_capture",
+			DispatchUrl: "http://127.0.0.1:8080/query_gateway_capture_os",
+		},
+		{
+			Name:        "hkrpg-official-cn",
+			Title:       "CN客户端更新",
+			Type:        "2",
+			DispatchUrl: "http://127.0.0.1:8080/query_gateway_capture_cn",
 		},
 	},
 	Game: &Game{

@@ -15,11 +15,11 @@ func (s *Server) InitRouter() {
 	// 调度
 	s.Router.GET("/query_dispatch", s.QueryDispatchHandler)
 	s.Router.GET("/query_gateway", s.QueryGatewayHandler)
-	s.Router.GET("/query_gateway_capture", s.QueryGatewayHandlerCapture)
-
+	s.Router.GET("/query_gateway_capture_cn", s.QueryGatewayHandlerCaptureCn)
+	s.Router.GET("/query_gateway_capture_os", s.QueryGatewayHandlerCaptureOs)
 	// 登录
 	s.Router.POST("/account/risky/api/check", s.RiskyApiCheckHandler)
-	Global := s.Router.Group("/hkrpg_global")
+	Global := s.Router.Group("/:game_biz")
 	{
 		Global.GET("/combo/granter/api/getConfig", s.ComboGranterApiGetConfigHandler) // 获取服务器配置
 		Global.POST("/mdk/shield/api/login", s.LoginRequestHandler)                   // 账号登录

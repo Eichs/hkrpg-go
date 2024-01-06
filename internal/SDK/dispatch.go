@@ -59,10 +59,45 @@ func (s *Server) QueryGatewayHandler(c *gin.Context) {
 	c.String(200, reqdataBase64)
 }
 
-func (s *Server) QueryGatewayHandlerCapture(c *gin.Context) {
+func (s *Server) QueryGatewayHandlerCaptureOs(c *gin.Context) {
 	urlPath := c.Request.URL.RawQuery
 
 	rsps, err := http.Get("https://prod-official-asia-dp01.starrails.com/query_gateway?" + urlPath)
+	if err != nil {
+		logger.Error("Request failed:", err)
+		return
+	}
+	defer rsps.Body.Close()
+
+	data, err := io.ReadAll(rsps.Body)
+	if err != nil {
+		logger.Error("Read body failed:", err)
+		return
+	}
+
+	datamsg, _ := base64.StdEncoding.DecodeString(string(data))
+
+	dispatch := new(proto.Gateserver)
+
+	err = pb.Unmarshal(datamsg, dispatch)
+	if err != nil {
+		logger.Error("", err)
+	}
+
+	dispatch.Ip = s.Config.Game.Addr
+	dispatch.Port = s.Config.Game.Port
+	dispatch.ClientSecretKey = base64.RawStdEncoding.EncodeToString(s.Config.Ec2b.Bytes())
+
+	rspbin, _ := pb.Marshal(dispatch)
+
+	dispatchb64 := base64.StdEncoding.EncodeToString(rspbin)
+
+	c.String(200, dispatchb64)
+}
+func (s *Server) QueryGatewayHandlerCaptureCn(c *gin.Context) {
+	urlPath := c.Request.URL.RawQuery
+
+	rsps, err := http.Get("https://prod-gf-cn-dp01.bhsr.com/query_gateway?" + urlPath)
 	if err != nil {
 		logger.Error("Request failed:", err)
 		return
