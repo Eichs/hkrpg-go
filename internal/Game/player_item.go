@@ -41,7 +41,7 @@ func (g *Game) HandleGetBagCsReq(payloadMsg []byte) {
 			MainAffixId:  relic.MainAffixId,
 			Exp:          relic.Exp,
 		}
-		for _, affixId := range g.Player.DbItem.RelicMap[relic.Tid].RelicAffix {
+		for _, affixId := range relic.RelicAffix {
 			subAffixList := &proto.RelicAffix{
 				AffixId: affixId.AffixId,
 				Cnt:     affixId.Cnt,
@@ -52,5 +52,5 @@ func (g *Game) HandleGetBagCsReq(payloadMsg []byte) {
 		rsp.RelicList = append(rsp.RelicList, relicList)
 	}
 
-	g.send(cmd.GetBagScRsp, rsp)
+	g.Send(cmd.GetBagScRsp, rsp)
 }

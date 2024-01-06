@@ -8,27 +8,35 @@ import (
 func (g *Game) HandleQueryProductInfoCsReq(payloadMsg []byte) {
 	rsp := new(proto.QuitLineupCsReq)
 	// TODO 是的，没错，还是同样的原因
-	g.send(cmd.QueryProductInfoScRsp, rsp)
+	g.Send(cmd.QueryProductInfoScRsp, rsp)
 }
 
 func (g *Game) SceneEntityMoveCsReq(payloadMsg []byte) {
-	msg := g.decodePayloadToProto(cmd.SceneEntityMoveCsReq, payloadMsg)
+	msg := g.DecodePayloadToProto(cmd.SceneEntityMoveCsReq, payloadMsg)
 	req := msg.(*proto.SceneEntityMoveCsReq)
 
-	g.Player.DbScene.EntryId = req.EntryId
-	g.Player.Pos = &Vector{
-		X: int(req.EntityMotionList[0].Motion.Pos.X),
-		Y: int(req.EntityMotionList[0].Motion.Pos.Y),
-		Z: int(req.EntityMotionList[0].Motion.Pos.Z),
-	}
+	if !g.Player.IsRogue {
+		for _, entryId := range req.EntityMotionList {
+			if g.Player.EntityList[entryId.EntityId] == nil {
+				break
+			}
+			if g.Player.EntityList[entryId.EntityId].Entity == g.GetSceneAvatarId() {
+				g.Player.Pos = &Vector{
+					X: int(entryId.Motion.Pos.X),
+					Y: int(entryId.Motion.Pos.Y),
+					Z: int(entryId.Motion.Pos.Z),
+				}
 
-	g.Player.Rot = &Vector{
-		X: int(req.EntityMotionList[0].Motion.Rot.X),
-		Y: int(req.EntityMotionList[0].Motion.Rot.Y),
-		Z: int(req.EntityMotionList[0].Motion.Rot.Z),
+				g.Player.Rot = &Vector{
+					X: int(entryId.Motion.Rot.X),
+					Y: int(entryId.Motion.Rot.Y),
+					Z: int(entryId.Motion.Rot.Z),
+				}
+			}
+		}
 	}
 
 	rsq := new(proto.SceneEntityMoveCsReq)
 	// TODO 是的，没错，还是同样的原因
-	g.send(cmd.SceneEntityMoveScRsp, rsq)
+	g.Send(cmd.SceneEntityMoveScRsp, rsq)
 }

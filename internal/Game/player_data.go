@@ -8,6 +8,25 @@ import (
 	"github.com/Eichs/hkrpg-go/protocol/proto"
 )
 
+func (g *Game) StaminaInfoScNotify() {
+	notify := &proto.StaminaInfoScNotify{
+		NextRecoverTime: 0,
+		Stamina:         g.Player.DbItem.MaterialMap[11].Num,
+		ReserveStamina:  g.Player.DbItem.MaterialMap[12].Num,
+	}
+	g.Send(cmd.StaminaInfoScNotify, notify)
+}
+
+func (g *Game) HandleGetBasicInfoCsReq() {
+	rsp := new(proto.GetBasicInfoScRsp)
+	rsp.CurDay = 1
+	rsp.NextRecoverTime = 1698768000
+	rsp.GameplayBirthday = g.Player.Birthday
+	rsp.PlayerSettingInfo = &proto.PlayerSettingInfo{}
+
+	g.Send(cmd.GetBasicInfoScRsp, rsp)
+}
+
 func (g *Game) HandleGetArchiveDataCsReq(payloadMsg []byte) {
 	rsp := new(proto.GetArchiveDataScRsp)
 	var archiveAvatarIdList []uint32
@@ -37,7 +56,7 @@ func (g *Game) HandleGetArchiveDataCsReq(payloadMsg []byte) {
 
 	rsp.ArchiveData = archiveData
 
-	g.send(cmd.GetArchiveDataScRsp, rsp)
+	g.Send(cmd.GetArchiveDataScRsp, rsp)
 }
 
 func (g *Game) HandleGetPlayerBoardDataCsReq(payloadMsg []byte) {
@@ -48,18 +67,18 @@ func (g *Game) HandleGetPlayerBoardDataCsReq(payloadMsg []byte) {
 		//Unk1:                 "",
 	}
 
-	for _, avatar := range g.Player.DbAvatar.Avatar {
+	for _, avatar := range g.Player.DbItem.HeadIcon {
 		headIcon := &proto.HeadIcon{
-			Id: avatar.AvatarId + 200000,
+			Id: avatar,
 		}
 		rsp.UnlockedHeadIconList = append(rsp.UnlockedHeadIconList, headIcon)
 	}
 
-	g.send(cmd.GetPlayerBoardDataScRsp, rsp)
+	g.Send(cmd.GetPlayerBoardDataScRsp, rsp)
 }
 
 func (g *Game) SetHeadIconCsReq(payloadMsg []byte) {
-	msg := g.decodePayloadToProto(cmd.SetHeadIconCsReq, payloadMsg)
+	msg := g.DecodePayloadToProto(cmd.SetHeadIconCsReq, payloadMsg)
 	req := msg.(*proto.SetHeadIconCsReq)
 
 	g.Player.HeadImage = req.Id
@@ -68,13 +87,12 @@ func (g *Game) SetHeadIconCsReq(payloadMsg []byte) {
 		CurrentHeadIconId: req.Id,
 	}
 
-	g.send(cmd.SetHeadIconScRsp, rsp)
+	g.Send(cmd.SetHeadIconScRsp, rsp)
 
-	g.UpDataPlayer()
 }
 
 func (g *Game) SetHeroBasicTypeCsReq(payloadMsg []byte) {
-	msg := g.decodePayloadToProto(cmd.SetHeroBasicTypeCsReq, payloadMsg)
+	msg := g.DecodePayloadToProto(cmd.SetHeroBasicTypeCsReq, payloadMsg)
 	req := msg.(*proto.SetHeroBasicTypeCsReq)
 
 	g.Player.DbAvatar.MainAvatar = req.BasicType
@@ -83,16 +101,15 @@ func (g *Game) SetHeroBasicTypeCsReq(payloadMsg []byte) {
 		BasicType: req.BasicType,
 	}
 
-	g.send(cmd.SetHeroBasicTypeScRsp, rsp)
+	g.Send(cmd.SetHeroBasicTypeScRsp, rsp)
 
-	g.UpDataPlayer()
 }
 
 func (g *Game) HandleGetFriendLoginInfoCsReq(payloadMsg []byte) {
 	rsp := new(proto.GetFriendLoginInfoScRsp)
 	rsp.FriendUidList = []uint32{99}
 
-	g.send(cmd.GetFriendLoginInfoScRsp, rsp)
+	g.Send(cmd.GetFriendLoginInfoScRsp, rsp)
 }
 
 func (g *Game) HandleGetRogueHandbookDataCsReq(payloadMsg []byte) {
@@ -103,7 +120,7 @@ func (g *Game) HandleGetRogueHandbookDataCsReq(payloadMsg []byte) {
 	}
 	rsp.HandbookInfo = handbookInfo
 
-	g.send(cmd.GetRogueHandbookDataScRsp, rsp)
+	g.Send(cmd.GetRogueHandbookDataScRsp, rsp)
 }
 
 func (g *Game) HandleGetChallengeCsReq(payloadMsg []byte) {
@@ -115,19 +132,19 @@ func (g *Game) HandleGetChallengeCsReq(payloadMsg []byte) {
 		}
 		rsp.ChallengeList = append(rsp.ChallengeList, challenge)
 	}
-	g.send(cmd.GetChallengeScRsp, rsp)
+	g.Send(cmd.GetChallengeScRsp, rsp)
 }
 
 func (g *Game) HandleGetChatEmojiListCsReq(payloadMsg []byte) {
 	rsp := new(proto.GetChallengeScRsp)
 	// TODO 是的，没错，还是同样的原因
-	g.send(cmd.GetChatEmojiListScRsp, rsp)
+	g.Send(cmd.GetChatEmojiListScRsp, rsp)
 }
 
 func (g *Game) HandleGetAssistHistoryCsReq() {
 	rsp := new(proto.GetChallengeScRsp)
 	// TODO 是的，没错，还是同样的原因
-	g.send(cmd.GetAssistHistoryScRsp, rsp)
+	g.Send(cmd.GetAssistHistoryScRsp, rsp)
 }
 
 func (g *Game) GetMailCsReq() {
@@ -141,22 +158,21 @@ func (g *Game) GetMailCsReq() {
 	}
 	rsp.MailList = append(rsp.MailList, mailList)
 
-	g.send(cmd.GetMailScRsp, rsp)
+	g.Send(cmd.GetMailScRsp, rsp)
 }
 
 func (g *Game) SetClientPausedCsReq() {
 	rsp := new(proto.SetClientPausedScRsp)
-	g.Player.IsPaused = false
 	g.Player.IsPaused = !g.Player.IsPaused
 	rsp.Paused = g.Player.IsPaused
 
-	g.send(cmd.SetClientPausedScRsp, rsp)
+	g.Send(cmd.SetClientPausedScRsp, rsp)
 }
 
 func (g *Game) GetFirstTalkNpcCsReq() {
 	rsp := new(proto.GetChallengeScRsp)
 	// TODO 是的，没错，还是同样的原因
-	g.send(cmd.GetFirstTalkNpcScRsp, rsp)
+	g.Send(cmd.GetFirstTalkNpcScRsp, rsp)
 }
 
 func (g *Game) HandleGetJukeboxDataCsReq(payloadMsg []byte) {
@@ -171,7 +187,7 @@ func (g *Game) HandleGetJukeboxDataCsReq(payloadMsg []byte) {
 		}
 		rsp.MusicList = append(rsp.MusicList, musicList)
 	}
-	g.send(cmd.GetJukeboxDataScRsp, rsp)
+	g.Send(cmd.GetJukeboxDataScRsp, rsp)
 }
 
 func (g *Game) HandleGetPhoneDataCsReq(payloadMsg []byte) {
@@ -181,79 +197,74 @@ func (g *Game) HandleGetPhoneDataCsReq(payloadMsg []byte) {
 	rsp.OwnedChatBubbles = []uint32{220002, 220000, 220001}
 	rsp.OwnedPhoneThemes = []uint32{221000, 221001, 221002, 221003}
 
-	g.send(cmd.GetPhoneDataScRsp, rsp)
+	g.Send(cmd.GetPhoneDataScRsp, rsp)
 }
 
 func (g *Game) SetNicknameCsReq(payloadMsg []byte) {
-	msg := g.decodePayloadToProto(cmd.SetNicknameCsReq, payloadMsg)
+	msg := g.DecodePayloadToProto(cmd.SetNicknameCsReq, payloadMsg)
 	req := msg.(*proto.SetNicknameCsReq)
 
 	if g.Player.IsNickName {
 		g.Player.NickName = req.Nickname
-		g.UpDataPlayer()
 	}
 
 	g.Player.IsNickName = !g.Player.IsNickName
 
-	playerSyncScNotify := &proto.PlayerSyncScNotify{
-		BasicInfo: &proto.PlayerBasicInfo{
-			Nickname:   req.Nickname,
-			Level:      g.Player.Level,
-			Exp:        g.Player.Exp,
-			Stamina:    g.Player.Stamina,
-			Mcoin:      0,
-			Hcoin:      0,
-			Scoin:      0,
-			WorldLevel: g.Player.WorldLevel,
-		},
-	}
-
 	rsp := new(proto.GetChallengeScRsp)
 	// TODO 是的，没错，还是同样的原因
 
-	g.send(cmd.PlayerSyncScNotify, playerSyncScNotify)
-	g.send(cmd.SetNicknameScRsp, rsp)
+	g.PlayerPlayerSyncScNotify()
+	g.Send(cmd.SetNicknameScRsp, rsp)
 }
 
 func (g *Game) SetGameplayBirthdayCsReq(payloadMsg []byte) {
-	msg := g.decodePayloadToProto(cmd.SetGameplayBirthdayCsReq, payloadMsg)
+	msg := g.DecodePayloadToProto(cmd.SetGameplayBirthdayCsReq, payloadMsg)
 	req := msg.(*proto.SetGameplayBirthdayCsReq)
 
 	g.Player.Birthday = req.Birthday
 
 	rsp := &proto.SetGameplayBirthdayScRsp{Birthday: req.Birthday}
 
-	g.send(cmd.SetGameplayBirthdayScRsp, rsp)
-
-	g.UpDataPlayer()
+	g.Send(cmd.SetGameplayBirthdayScRsp, rsp)
 }
 
 func (g *Game) SetSignatureCsReq(payloadMsg []byte) {
-	msg := g.decodePayloadToProto(cmd.SetSignatureCsReq, payloadMsg)
+	msg := g.DecodePayloadToProto(cmd.SetSignatureCsReq, payloadMsg)
 	req := msg.(*proto.SetSignatureCsReq)
 
 	g.Player.Signature = req.Signature
 
 	rsp := &proto.SetSignatureScRsp{Signature: req.Signature}
 
-	g.send(cmd.SetSignatureScRsp, rsp)
-
-	g.UpDataPlayer()
+	g.Send(cmd.SetSignatureScRsp, rsp)
 }
 
 func (g *Game) HandlePlayerHeartBeatCsReq(payloadMsg []byte) {
-	msg := g.decodePayloadToProto(cmd.PlayerHeartBeatCsReq, payloadMsg)
+	msg := g.DecodePayloadToProto(cmd.PlayerHeartBeatCsReq, payloadMsg)
 	req := msg.(*proto.PlayerHeartbeatCsReq)
 
 	rsp := new(proto.PlayerHeartbeatScRsp)
 	rsp.ServerTimeMs = uint64(time.Now().UnixNano() / 1e6)
 	rsp.ClientTimeMs = req.ClientTimeMs
 
-	g.send(cmd.PlayerHeartBeatScRsp, rsp)
+	g.Send(cmd.PlayerHeartBeatScRsp, rsp)
 }
 
 func (g *Game) InteractPropCsReq() {
 	rsp := new(proto.InteractPropScRsp)
 
-	g.send(cmd.InteractPropScRsp, rsp)
+	g.Send(cmd.InteractPropScRsp, rsp)
+}
+
+func (g *Game) TextJoinQueryCsReq() {
+	rsp := new(proto.TextJoinQueryScRsp)
+	for _, textJoin := range gdconf.GetTextJoinConfigMap() {
+		textJoinList := &proto.TextJoinQueryScRsp_TextJoinInfo{
+			TextItemId:       textJoin.TextJoinID,
+			TextItemConfigId: textJoin.TextJoinItemList[len(textJoin.TextJoinItemList)-1],
+		}
+		rsp.TextJoinList = append(rsp.TextJoinList, textJoinList)
+	}
+
+	g.Send(cmd.TextJoinQueryScRsp, rsp)
 }

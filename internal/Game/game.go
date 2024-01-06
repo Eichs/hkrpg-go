@@ -2,6 +2,7 @@ package Game
 
 import (
 	"encoding/json"
+	"strconv"
 	"time"
 
 	"github.com/Eichs/hkrpg-go/internal/DataBase"
@@ -13,13 +14,15 @@ import (
 	pb "google.golang.org/protobuf/proto"
 )
 
+var SNOWFLAKE *alg.SnowflakeWorker // 雪花唯一id生成器
+
 type Game struct {
-	Uid         uint32
-	Seed        uint64
-	NetMsgInput chan *NetMsg
-	KcpConn     *kcp.UDPSession
-	Db          *DataBase.Store
-	Snowflake   *alg.SnowflakeWorker // 雪花唯一id生成器
+	IsToken        bool // 是否通过token验证
+	Uid            uint32
+	Seed           uint64
+	NetMsgInput    chan *NetMsg
+	KcpConn        *kcp.UDPSession
+	LastActiveTime int64 // 最近一次的活跃时间
 	// 玩家数据
 	Player *PlayerData
 	// 密钥
@@ -33,9 +36,12 @@ type NetMsg struct {
 	Type      string
 }
 
-func (g *Game) send(cmdid uint16, playerMsg pb.Message) {
-	data := protojson.Format(playerMsg)
-	logger.Debug("[UID:%v] S --> C : CmdId: %v KcpMsg: \n%s\n", g.Uid, cmdid, data)
+func (g *Game) Send(cmdid uint16, playerMsg pb.Message) {
+	// 打印需要的数据包
+	if cmdid == 1448 {
+		data := protojson.Format(playerMsg)
+		logger.Debug("[UID:%v] S --> C : CmdId: %v KcpMsg: \n%s\n", g.Uid, cmdid, data)
+	}
 	netMsg := new(NetMsg)
 	netMsg.G = g
 	netMsg.CmdId = cmdid
@@ -44,7 +50,7 @@ func (g *Game) send(cmdid uint16, playerMsg pb.Message) {
 	g.NetMsgInput <- netMsg
 }
 
-func (g *Game) decodePayloadToProto(cmdId uint16, msg []byte) (protoObj pb.Message) {
+func (g *Game) DecodePayloadToProto(cmdId uint16, msg []byte) (protoObj pb.Message) {
 	protoObj = cmd.GetSharedCmdProtoMap().GetProtoObjCacheByCmdId(cmdId)
 	if protoObj == nil {
 		logger.Error("get new proto object is nil")
@@ -55,58 +61,89 @@ func (g *Game) decodePayloadToProto(cmdId uint16, msg []byte) (protoObj pb.Messa
 		logger.Error("unmarshal proto data err: %v", err)
 		return nil
 	}
-	data := protojson.Format(protoObj)
-	logger.Debug("[UID:%v] C --> S : NAME: %s KcpMsg: \n%s\n", g.Uid, cmd.GetSharedCmdProtoMap().GetCmdNameByCmdId(cmdId), data)
+	// 打印需要的数据包
+	if cmdId == 0 {
+		data := protojson.Format(protoObj)
+		logger.Debug("[UID:%v] C --> S : NAME: %s KcpMsg: \n%s\n", g.Uid, cmd.GetSharedCmdProtoMap().GetCmdNameByCmdId(cmdId), data)
+	}
+	// logger.Debug("[UID:%v] C --> S : NAME: %s\n", g.Uid, cmd.GetSharedCmdProtoMap().GetCmdNameByCmdId(cmdId))
 	return protoObj
 }
 
-func (g *Game) UpDataPlayer() {
+func (g *Game) UpDataPlayer() error {
 	var err error
 	if g.KcpConn == nil {
-		return
+		return nil
 	}
 	if g.Uid == 0 {
-		return
+		return nil
 	}
 	dbDate := new(DataBase.Player)
 	dbDate.AccountUid = g.Uid
-	dbDate.PlayerData, err = json.Marshal(g.Player)
+	data := g.Player
+	dbDate.PlayerData, err = json.Marshal(data)
 	if err != nil {
 		logger.Error("json to bin error:%s", err)
-		return
+		return err
 	}
-	if err = g.Db.UpdatePlayer(dbDate); err != nil {
+	if err = DataBase.DBASE.UpdatePlayer(dbDate); err != nil {
 		logger.Error("Update Player error")
-		return
+		return err
 	}
 	logger.Info("数据库账号:%v 数据更新", g.Uid)
+	return nil
 }
 
 func (g *Game) AutoUpDataPlayer() {
 	ticker := time.NewTicker(time.Second * 60)
 	for {
 		<-ticker.C
+		timestamp := time.Now().Unix()
+		if timestamp-g.LastActiveTime >= 120 {
+			g.KickPlayer()
+			return
+		}
 		if g.KcpConn == nil {
+			g.KickPlayer()
 			return
 		}
-		if g.Db == nil {
-			return
-		}
-		if g.Uid == 0 {
-			continue
-		}
-		logger.Info("[UID:%v] || 定时保存在线玩家数据", g.Uid)
-		g.UpDataPlayer()
 	}
 }
 
-func (g *Game) exitGame() {
-	g.UpDataPlayer()
-	logger.Info("[UID:%v] || 玩家已离线", g.Uid)
-	netMsg := new(NetMsg)
-	netMsg.G = g
-	netMsg.Type = "Close"
-	g.NetMsgInput <- netMsg
-	g.Db = nil
+func (g *Game) KickPlayer() error {
+	if g.Uid != 0 {
+		err := g.UpDataPlayer()
+		if err != nil {
+			return err
+		}
+		logger.Info("[UID:%v] || 玩家已离线", g.Uid)
+		netMsg := new(NetMsg)
+		netMsg.G = g
+		netMsg.Type = "Close"
+		g.NetMsgInput <- netMsg
+	}
+	return nil
+}
+
+func (g *Game) ChangePlayer() {
+	if g.Uid != 0 {
+		err := g.UpDataPlayer()
+		if err != nil {
+			return
+		}
+		logger.Info("[UID:%v] || 玩家重复登录", g.Uid)
+		netMsg := new(NetMsg)
+		netMsg.G = g
+		netMsg.Type = "Change"
+		g.NetMsgInput <- netMsg
+	}
 	return
+}
+
+func stou32(msg string) uint32 {
+	if msg == "" {
+		return 0
+	}
+	ms, _ := strconv.ParseUint(msg, 10, 32)
+	return uint32(ms)
 }
